@@ -1,0 +1,46 @@
+CONFIGURATION_PORT=4111
+BROADCAST_ADDRESS=192.168.1.255
+MODULE_NAME=module2
+
+
+PARENT_MODULE_NAME=module0
+module0_HOSTNAME=durip09
+//CHILD_MODULE_NAME=module1
+//CHILD_MODULE_NAME=module2
+//module1_HOSTNAME=durip02
+//module2_HOSTNAME=durip03
+
+
+/////////////////////////////////////////////////
+CPU=0
+HYPERPERIOD = 4
+MAXITERATIONS=4
+PARTITION_INIT_TIMEOUT=10
+PARTITION_NAME = partition1 
+PARTITION_NAME = partition2
+partition1_EXECUTABLE =  ./partition1
+partition2_EXECUTABLE =  ./partition2
+partition1_SCHEDULE=0,2
+partition2_SCHEDULE=2,2
+
+////////////////////////////////////////////
+
+partition1_SAMPLINGPORT= T_SAMPLE_PORT1
+partition2_SAMPLINGPORT = SAMPLE_PORT_DEST 
+
+////////////////T_QUEUE_PORT1////////////////////////
+
+T_SAMPLE_PORT1_MAXMESSAGESIZE= 12 //You need to know the size of this port i.e. size of Payload. //The message size is specified in bytes
+T_SAMPLE_PORT1_DIRECTION= SOURCE
+T_SAMPLE_PORT1_REFRESHPERIOD= 4
+
+/////////////T_QUEUE_PORT_DEST//////////////////////////////////////////////
+SAMPLE_PORT_DEST_MAXMESSAGESIZE= 12
+SAMPLE_PORT_DEST_DIRECTION= DESTINATION
+SAMPLE_PORT_DEST_REFRESHPERIOD= 4
+
+////////////Defining Channel/////////////////////
+CHANNEL_NAME= channel1
+channel1_SOURCE = T_SAMPLE_PORT1
+channel1_DESTINATION= SAMPLE_PORT_DEST
+///////////////////////////////////////////////////////////////////////////////////

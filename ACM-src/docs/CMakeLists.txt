@@ -1,0 +1,49 @@
+set(h_sources
+    ${ROOT_INCLUDE}/ACM/INTERNAL/PROCESS.h 
+	${ROOT_INCLUDE}/ACM/INTERNAL/ACM_THREAD_SUPPORT.h 
+	${ROOT_INCLUDE}/ACM/INTERNAL/APEX.h 
+	${ROOT_INCLUDE}/ACM/USER/ACM_COMPONENT.h  
+	${ROOT_INCLUDE}/ACM/USER/ACM_LOGGER.h  
+	${ROOT_INCLUDE}/ACM/USER/ACM_UTILITIES.h  
+	${ROOT_INCLUDE}/ACM/USER/ACM_EXCEPTION.h  
+	${ROOT_INCLUDE}/ACM/USER/APEX_INTERFACE.h 
+	${ROOT_INCLUDE}/ACM/INTERNAL/ACM_INTERNAL_INCLUDE.h  
+	${ROOT_INCLUDE}/ACM/USER/APEX_TYPES.h  
+	${ROOT_INCLUDE}/ACM/INTERNAL/QUEUE_PORT.h  
+	${ROOT_INCLUDE}/ACM/INTERNAL/SAMPLING_PORT.h  
+	)
+
+ADD_CUSTOM_TARGET(DOCS DEPENDS ${ACM_BINARY_DIR}/html/index.html ${ACM_BINARY_DIR}/userhtml/index.html)
+
+ADD_CUSTOM_COMMAND(
+	  OUTPUT ${ACM_BINARY_DIR}/html/index.html
+      COMMAND doxygen Doxyfile
+	  WORKING_DIRECTORY ${ACM_SOURCE_DIR} 
+      MAIN_DEPENDENCY ${h_sources}
+      )
+
+	  ADD_CUSTOM_COMMAND(
+      OUTPUT ${ACM_BINARY_DIR}/userhtml/index.html
+      COMMAND doxygen DoxyfileUser
+	  WORKING_DIRECTORY ${ACM_SOURCE_DIR} 
+      MAIN_DEPENDENCY ${h_sources}
+      )
+
+	  
+INSTALL(DIRECTORY  DESTINATION doc)
+INSTALL(CODE " execute_process( COMMAND make DOCS  WORKING_DIRECTORY ${ACM_SOURCE_DIR}) " )
+INSTALL(DIRECTORY userhtml/ DESTINATION doc/userhtml)
+INSTALL(CODE " execute_process( COMMAND chmod 755 userhtml  WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/doc) " )
+SET(DOC_EXTRA_DIST_FILES 
+ ComponentExample.png 
+ ComponentExamplesmall.png 
+ ImplementationBlockDiagram.jpg 
+ ImplementationBlockDiagramlarge.jpg 
+ mainpage.h 
+ ModuleManager.pdf 
+ ArincEmulatorServices.pdf)
+INSTALL(FILES ${DOC_EXTRA_DIST_FILES} DESTINATION doc/userhtml)
+
+
+
+	

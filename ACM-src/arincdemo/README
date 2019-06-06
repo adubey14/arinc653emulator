@@ -1,0 +1,20 @@
+Make sure you have executed "source <ACM_INSTALL_FOLDER>/bootstrap.sh.
+Use ./autogen.sh to set up the environment and create all files
+Use make to make all demos
+Use make run to run all demos
+Use make realclean to clean all the log files.
+Use make clean to clean only the executable and object files.
+
+====================
+This folder contains the following examples
+single partition examples
+   1. testBlackboard.cc
+   2. testBuffer.cc
+   3. testEvent.cc
+   4. testProcessServices.cc
+   5. testSemaphoreServices.cc
+
+two partition examples
+
+   1. queueing_port_use/partition1.cc and queueing_port_use/partition2.cc
+   2. sampling_port_use/partition1.cc and sampling_port_use/partition2.cc

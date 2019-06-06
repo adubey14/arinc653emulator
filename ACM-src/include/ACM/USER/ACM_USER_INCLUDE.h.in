@@ -1,0 +1,28 @@
+//# Copyright (c) Vanderbilt University, 2009
+//# ALL RIGHTS RESERVED
+//# Vanderbilt University disclaims all warranties with regard to this
+//# software, including all implied warranties of merchantability
+//# and fitness.  In no event shall Vanderbilt University be liable for
+//# any special, indirect or consequential damages or any damages
+//# whatsoever resulting from loss of use, data or profits, whether
+//# in an action of contract, negligence or other tortious action,
+//# arising out of or in connection with the use or performance of
+//# this software.
+#ifndef _ACM_USER_INCLUDE_H
+#define _ACM_USER_INCLUDE_H
+#include <ACM/USER/APEX_TYPES.h>
+#include <ACM/USER/ACM_HM_TYPES.h>
+#include <ACM/USER/ACM_EXCEPTION.h>
+#include <ACM/USER/ACM_UTILITIES.h>
+#include <ACM/USER/ACM_LOGGER.h>
+#include <ACM/USER/APEX_INTERFACE.h>
+#include <ACM/USER/ACM_APEX_EXTENSIONS.h>
+#include <ACM/USER/ACM_COMPONENT.h>
+#include <ACM/USER/EVENT_PORT.h>
+#include <stdio.h>
+#include <ACM/USER/ACM_STATE_VARIABLE_HELPER.h>
+@ACM_CORBA_INCLUDE_FILES@
+
+
+#endif
+

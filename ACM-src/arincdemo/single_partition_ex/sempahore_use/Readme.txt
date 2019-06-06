@@ -1,0 +1,1 @@
+This example demonstrates a scenario in which two periodic processes synchronize using a semaphore.

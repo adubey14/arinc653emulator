@@ -1,0 +1,343 @@
+module ACM_USER {
+
+#define SYSTEM_LIMIT_NUMBER_OF_PARTITIONS		32 //!< -- module scope
+#define SYSTEM_LIMIT_NUMBER_OF_MESSAGES			512 //!< -- module scope
+#define SYSTEM_LIMIT_MESSAGE_SIZE				8192 //!< -- module scope
+#define SYSTEM_LIMIT_NUMBER_OF_PROCESSES		128 //!<-- partition scope
+#define SYSTEM_LIMIT_NUMBER_OF_SAMPLING_PORTS	512 //!< -- partition scope
+#define SYSTEM_LIMIT_NUMBER_OF_QUEUING_PORTS	512 //!< -- partition scope
+#define SYSTEM_LIMIT_NUMBER_OF_BUFFERS			256 //!< -- partition scope
+#define SYSTEM_LIMIT_NUMBER_OF_BLACKBOARDS		256 //!< -- partition scope
+#define SYSTEM_LIMIT_NUMBER_OF_SEMAPHORES		256 //!< -- partition scope
+#define SYSTEM_LIMIT_NUMBER_OF_EVENTS			256 //!< -- partition scope
+
+
+	//! \name Base APEX types
+	//@{
+	/* !
+	* 
+	*/
+	typedef char APEX_BYTE;		//!< 8-bit unsigned
+	typedef long APEX_INTEGER;				//!< 32-bit signed
+	typedef unsigned long APEX_UNSIGNED;	//!< 32-bit unsigned
+	typedef long long APEX_LONG_INTEGER;	//!< 64-bit signed
+
+	//! \name  Prefix Definition
+	//@{
+	/* !
+	* 
+	*/
+#define NANO 1000000000					//!<9 zeros
+#define MILLI 1000						//!<3 zeros
+#define MICRO 1000000					//!<6 zeros
+
+
+	//! \name General APEX types
+	//@{
+	/* !
+	* 
+	*/
+	typedef APEX_LONG_INTEGER SYSTEM_TIME_TYPE; //!<SYSTEM_TIME_TYPE is defined using a signed 64-bit value with a resolution of 1 nanosecond.
+
+
+	enum RETURN_CODE_TYPE
+	{
+		NO_ERROR,		//!< request valid and operation performed
+		NO_ACTION,		//!< system's operational status unaffected by request
+		NOT_AVAILABLE,	//!< the request cannot be performed immediately
+		INVALID_PARAM,	//!< parameter specified in request invalid
+		INVALID_CONFIG,	//!< parameter specified in request incompatible with current configuration (e.g., as specified by system integrator)
+		INVALID_MODE,	//!< request incompatible with current mode of operation
+		TIMED_OUT		//!< time-out associated with request has expired
+	};
+
+#define MAX_NAME_LENGTH 30
+	typedef char NAME_TYPE[MAX_NAME_LENGTH];
+	typedef APEX_LONG_INTEGER SYSTEM_ADDRESS_TYPE;
+	typedef APEX_LONG_INTEGER MESSAGE_ADDR_TYPE;
+	typedef APEX_INTEGER MESSAGE_SIZE_TYPE;
+	typedef APEX_INTEGER MESSAGE_RANGE_TYPE;
+	 enum PORT_DIRECTION_TYPE { SOURCE, DESTINATION  };
+	 enum QUEUING_DISCIPLINE_TYPE{ FIFO , PRIORITY } ;
+	
+
+
+
+
+
+	//! \name PROCESS constant and type definitions and management services
+	//@{
+	/* !
+	* 
+	*/
+#define MAX_NUMBER_OF_PROCESSES SYSTEM_LIMIT_NUMBER_OF_PROCESSES
+#define MIN_PRIORITY_VALUE 1
+#define MAX_PRIORITY_VALUE 63
+#define MAX_LOCK_LEVEL 16
+	typedef NAME_TYPE PROCESS_NAME_TYPE;
+	//typedef APEX_INTEGER PROCESS_ID_TYPE;
+	typedef APEX_UNSIGNED PROCESS_ID_TYPE;
+	typedef APEX_INTEGER LOCK_LEVEL_TYPE;
+	typedef APEX_UNSIGNED STACK_SIZE_TYPE;
+	typedef APEX_INTEGER WAITING_RANGE_TYPE;
+	typedef APEX_INTEGER PRIORITY_TYPE;
+
+	enum PROCESS_STATE_TYPE {
+		DORMANT ,
+		READY ,
+		RUNNING ,
+		WAITING 
+	} ;
+
+	enum DEADLINE_TYPE { SOFT, HARD } ;
+
+	//!Apex Structure for storing process attributes
+	struct PROCESS_ATTRIBUTE_TYPE {
+		SYSTEM_TIME_TYPE PERIOD; //!<Time Period. This Value is defined in Nanoseconds
+		SYSTEM_TIME_TYPE TIME_CAPACITY; //!< Worst Case Execution Time. Defined in Nanoseconds
+		SYSTEM_ADDRESS_TYPE ENTRY_POINT; //!<System address point is the entry function i.e. code to be executed
+		STACK_SIZE_TYPE STACK_SIZE; //!< We do not use it currently
+		PRIORITY_TYPE BASE_PRIORITY; //!< Should be between PARTITION_PROCESS_HIGHPRIORITY and PARTITION_PROCESS_LOWPRIORITY
+		DEADLINE_TYPE DEADLINE; //! Deadline type, can be SOFT or HARD
+		PROCESS_NAME_TYPE NAME; //! Name of the process. This name should be unique in a partition.
+
+	} ;
+
+	
+//!Apex Structure for inquiring the status of a process.
+	struct PROCESS_STATUS_TYPE {
+		SYSTEM_TIME_TYPE DEADLINE_TIME;
+		PRIORITY_TYPE CURRENT_PRIORITY;
+		PROCESS_STATE_TYPE PROCESS_STATE;
+		PROCESS_ATTRIBUTE_TYPE ATTRIBUTES;
+	} ;
+
+
+
+	//! \name PARTITION constant and type definitions and management services
+	//@{
+	/* !
+	* 
+	*/
+	enum OPERATING_MODE_TYPE {
+		IDLE ,
+		COLD_START ,
+		WARM_START ,
+		NORMAL 
+	} ;
+
+	typedef APEX_INTEGER PARTITION_ID_TYPE;
+
+	enum START_CONDITION_TYPE {
+		NORMAL_START,
+		PARTITION_RESTART,
+		HM_MODULE_RESTART,
+		HM_PARTITION_RESTART
+	};
+//!Apex Structure
+	struct PARTITION_STATUS_TYPE {
+		SYSTEM_TIME_TYPE PERIOD;
+		SYSTEM_TIME_TYPE DURATION;
+		PARTITION_ID_TYPE IDENTIFIER;
+		LOCK_LEVEL_TYPE LOCK_LEVEL;
+		OPERATING_MODE_TYPE OPERATING_MODE;
+		START_CONDITION_TYPE START_CONDITION;
+	};
+
+	//! \name SEMAPHORE constant and type definitions and management services
+	//@{
+	/* !
+	* 
+	*/
+#define MAX_NUMBER_OF_SEMAPHORES SYSTEM_LIMIT_NUMBER_OF_SEMAPHORES
+#define MAX_SEMAPHORE_VALUE 32767
+	typedef NAME_TYPE SEMAPHORE_NAME_TYPE;
+	//typedef APEX_INTEGER SEMAPHORE_ID_TYPE;
+	typedef APEX_UNSIGNED SEMAPHORE_ID_TYPE;
+	typedef APEX_INTEGER SEMAPHORE_VALUE_TYPE;
+
+	//!Apex Structure
+	struct SEMAPHORE_STATUS_TYPE {
+		SEMAPHORE_VALUE_TYPE CURRENT_VALUE;
+		SEMAPHORE_VALUE_TYPE MAXIMUM_VALUE;
+		WAITING_RANGE_TYPE WAITING_PROCESSES;
+	} ;
+
+
+	//! \name EVENT constant and type definitions and management services
+	//@{
+	/* ! Events are similar to condition Variables
+	* 
+	*/
+#define MAX_NUMBER_OF_EVENTS SYSTEM_LIMIT_NUMBER_OF_EVENTS
+	typedef NAME_TYPE EVENT_NAME_TYPE;
+//	typedef APEX_INTEGER EVENT_ID_TYPE;
+		typedef APEX_UNSIGNED EVENT_ID_TYPE;
+	enum EVENT_STATE_TYPE { DOWN  , UP  } ;
+
+	//!Apex Structure
+	struct EVENT_STATUS_TYPE {
+		EVENT_STATE_TYPE EVENT_STATE;
+		WAITING_RANGE_TYPE WAITING_PROCESSES;
+	} ;
+
+
+	//! \name SAMPLING PORT constant and type definitions and management services
+	//@{
+	/* ! 
+	* 
+	*/
+
+#define SYSTEM_LIMIT_MAX_SAMPLING_MESSAGE_SIZE 1024
+#define MAX_NUMBER_OF_SAMPLING_PORTS SYSTEM_LIMIT_NUMBER_OF_SAMPLING_PORTS
+	typedef NAME_TYPE SAMPLING_PORT_NAME_TYPE;
+	typedef APEX_UNSIGNED SAMPLING_PORT_ID_TYPE;
+	enum VALIDITY_TYPE { INVALID  , VALID } ;
+
+	
+	struct SAMPLING_PORT_STATUS_TYPE {
+		SYSTEM_TIME_TYPE REFRESH_PERIOD;
+		MESSAGE_SIZE_TYPE MAX_MESSAGE_SIZE;
+		PORT_DIRECTION_TYPE PORT_DIRECTION;
+		VALIDITY_TYPE LAST_MSG_VALIDITY;
+	} ;
+
+	//! \name QUEUING PORT constant and type definitions and management services
+	//@{
+	/* ! 
+	* 
+	*/
+
+#define MAX_NUMBER_OF_QUEUING_PORTS SYSTEM_LIMIT_NUMBER_OF_QUEUING_PORTS
+	typedef NAME_TYPE QUEUING_PORT_NAME_TYPE;
+	typedef APEX_UNSIGNED QUEUING_PORT_ID_TYPE;
+
+	//!Apex Structure. Not yet implmented
+	struct QUEUING_PORT_STATUS_TYPE  {
+		MESSAGE_RANGE_TYPE NB_MESSAGE;
+		MESSAGE_RANGE_TYPE MAX_NB_MESSAGE;
+		MESSAGE_SIZE_TYPE MAX_MESSAGE_SIZE;
+		PORT_DIRECTION_TYPE PORT_DIRECTION;
+		WAITING_RANGE_TYPE WAITING_PROCESSES;
+	} ;
+
+	//! \name ERROR constant and type definitions 
+	//@{
+	/* ! 
+	* 
+	*/
+
+#define MAX_ERROR_MESSAGE_SIZE 64
+	typedef APEX_INTEGER ERROR_MESSAGE_SIZE_TYPE;
+	typedef APEX_BYTE ERROR_MESSAGE_TYPE[MAX_ERROR_MESSAGE_SIZE];
+	
+	//! Probably needs to be expanded.
+	enum ERROR_CODE_TYPE{			
+			DEADLINE_MISSED ,
+			APPLICATION_ERROR,
+			NUMERIC_ERROR ,
+			ILLEGAL_REQUEST,
+			STACK_OVERFLOW,
+			MEMORY_VIOLATION ,
+			HARDWARE_FAULT,
+			POWER_FAIL 
+	} ;
+	//!Apex Structure
+	struct ERROR_STATUS_TYPE  {
+		ERROR_CODE_TYPE ERROR_CODE;
+		ERROR_MESSAGE_SIZE_TYPE LENGTH;
+		PROCESS_ID_TYPE FAILED_PROCESS_ID;
+		SYSTEM_ADDRESS_TYPE FAILED_ADDRESS;
+		ERROR_MESSAGE_TYPE MESSAGE;
+	} ;
+
+
+	//! \name BLACKBOARD constant and type definitions 
+	//@{
+	/* ! 
+	* 
+	*/
+
+	#define MAX_NUMBER_OF_BLACKBOARDS SYSTEM_LIMIT_NUMBER_OF_BLACKBOARDS
+typedef NAME_TYPE BLACKBOARD_NAME_TYPE;
+//typedef APEX_INTEGER BLACKBOARD_ID_TYPE;
+typedef APEX_UNSIGNED BLACKBOARD_ID_TYPE;
+enum EMPTY_INDICATOR_TYPE{ EMPTY , OCCUPIED  } ;
+
+//!APEX structure for storing blackboard status
+struct BLACKBOARD_STATUS_TYPE{
+EMPTY_INDICATOR_TYPE EMPTY_INDICATOR;
+MESSAGE_SIZE_TYPE MAX_MESSAGE_SIZE;
+WAITING_RANGE_TYPE WAITING_PROCESSES;
+} ;
+
+
+//! \name BUFFER constant and type definitions 
+	//@{
+	/* ! 
+	* 
+	*/
+
+#define MAX_NUMBER_OF_BUFFERS SYSTEM_LIMIT_NUMBER_OF_BUFFERS
+typedef NAME_TYPE BUFFER_NAME_TYPE;
+typedef APEX_UNSIGNED BUFFER_ID_TYPE;
+ 
+//!Apex Structure
+struct BUFFER_STATUS_TYPE{
+MESSAGE_RANGE_TYPE NB_MESSAGE;
+MESSAGE_RANGE_TYPE MAX_NB_MESSAGE;
+MESSAGE_SIZE_TYPE MAX_MESSAGE_SIZE;
+WAITING_RANGE_TYPE WAITING_PROCESSES;
+} ;
+
+#define MAX_HM_BUFFER_MESSGAES 20
+typedef APEX_INTEGER HM_DESCRIPTOR_ID_TYPE;
+struct PROC_HM_ASSOCIATION_TYPE
+{
+	PROCESS_ID_TYPE PROCESS_ID;
+	BLACKBOARD_ID_TYPE BLACKBOARD_ID;
+};
+
+#define MAX_HM_PROC_RELATIONSHIPS SYSTEM_LIMIT_NUMBER_OF_PROCESSES
+#define ERROR_RESPONSE_TYPE_MESSAGE_SIZE 200
+
+enum MESSAGE_TYPE {STRINGDATA, USER_SPECIFIC};
+struct ERROR_RESPONSE_TYPE
+{
+	ERROR_CODE_TYPE ERROR_CODE;
+	SYSTEM_TIME_TYPE TIMEOFMESSAGE;		
+	MESSAGE_TYPE MESSAGE_DISCRIMINATOR;
+	APEX_UNSIGNED MESSAGE_LENGTH;
+	APEX_BYTE MESSAGE[ERROR_RESPONSE_TYPE_MESSAGE_SIZE]; //APPLICATION SPECIFIC DATA
+};
+
+struct HM_RESPONSE_TYPE
+{
+	ERROR_CODE_TYPE ERROR_CODE;
+	SYSTEM_TIME_TYPE TIMEOFMESSAGE;		
+	MESSAGE_TYPE MESSAGE_DISCRIMINATOR;
+	APEX_UNSIGNED MESSAGE_LENGTH;
+	APEX_BYTE MESSAGE[ERROR_RESPONSE_TYPE_MESSAGE_SIZE]; //APPLICATION SPECIFIC DATA
+};
+
+
+
+enum RESPONDING_ENTITY_TYPE {PROCESS,HM,PARTITIONSCHEDULER};
+//! USed to store the process Responses;
+struct PROCESS_RESPONSE_TYPE
+{
+	boolean NO_ERROR;		
+	RESPONDING_ENTITY_TYPE RESPONDING_ENTITY;
+	SYSTEM_TIME_TYPE TIMEOFMESSAGE;
+	ERROR_RESPONSE_TYPE ERROR_RESPONSE;
+};
+
+
+
+struct HM_DESCRIPTOR_TYPE{	
+	PROCESS_ID_TYPE HM_PROCESS_ID;
+	BUFFER_ID_TYPE HM_BUFFER_ID;
+	PROC_HM_ASSOCIATION_TYPE PROC_HM_ASSOCIATION[MAX_HM_PROC_RELATIONSHIPS];
+	APEX_INTEGER CURRENTLY_REGISTERED_PROCS;
+};
+};

@@ -1,0 +1,42 @@
+/////////////////////////////////////////////////
+CPU=0
+HYPERPERIOD = 3
+MAXITERATIONS=4
+PARTITION_INIT_TIMEOUT=10
+PARTITION_NAME = partition1 
+PARTITION_NAME = partition2
+PARTITION_NAME = partition3
+partition1_EXECUTABLE =  ./partition1
+partition2_EXECUTABLE =  ./partition2
+partition3_EXECUTABLE =  ./partition3
+partition1_SCHEDULE=0,1
+partition2_SCHEDULE=1,1
+partition3_SCHEDULE=2,1
+
+////////////////////////////////////////////
+
+partition1_QUEUINGPORT= T_QUEUE_PORT1
+partition2_QUEUINGPORT = T_QUEUE_PORT_DEST_2 
+partition3_QUEUINGPORT = T_QUEUE_PORT_DEST_3
+
+////////////////T_QUEUE_PORT1////////////////////////
+
+T_QUEUE_PORT1_MAXMESSAGESIZE= 12 //You need to know the size of this port i.e. size of Payload. //The message size is specified in bytes
+T_QUEUE_PORT1_DIRECTION= SOURCE
+T_QUEUE_PORT1_MAXNUMBEROFMESSAGES= 20
+
+/////////////T_QUEUE_PORT_DEST//////////////////////////////////////////////
+T_QUEUE_PORT_DEST_2_MAXMESSAGESIZE= 12
+T_QUEUE_PORT_DEST_2_DIRECTION= DESTINATION
+T_QUEUE_PORT_DEST_2_MAXNUMBEROFMESSAGES= 20
+
+T_QUEUE_PORT_DEST_3_MAXMESSAGESIZE= 12
+T_QUEUE_PORT_DEST_3_DIRECTION= DESTINATION
+T_QUEUE_PORT_DEST_3_MAXNUMBEROFMESSAGES= 20
+
+////////////Defining Channel/////////////////////
+CHANNEL_NAME= channel1
+channel1_SOURCE = T_QUEUE_PORT1
+channel1_DESTINATION= T_QUEUE_PORT_DEST_2
+channel1_DESTINATION= T_QUEUE_PORT_DEST_3
+///////////////////////////////////////////////////////////////////////////////////

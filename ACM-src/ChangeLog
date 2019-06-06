@@ -1,0 +1,46 @@
+Version 1.0.3.1 -3/05/
+- Modification of Logger Behavior
+- By default, the application code will not generate any log file, even if logging is enabled. Users must set an environment variable. ACM_LOG_ENTRIES, e.g. ACM_LOG_ENTRIES=100. 
+
+
+
+Version 1.0.2
+- Minor Change
+- Added utility script traceActivityAll to parse the partition logs in a module and create a matlab script for analysis and plots
+
+Version 1.0.2
+- Minor stability Fixes 
+- Added ACM Timer for supporting timeouts in state machines
+
+Version 1.0.1
+
+FEATURE:
+- ACM-20: Now you can configure the time the module manager will wait for a response from a partition after initialization. This limit can be set using PARTITION_INIT_TIMEOUT parameter. If it is not set a default value of 5 seconds will be used.
+Bug Fixes for Version 1.0.0
+- [ACM-22] possible incorrect RETURN_CODE from PERIODIC_WAIT
+-  [ACM-19] Module Manager fails sometimes with multiple channels in a partition Created: 12/May/10  Updated: 12/May/10
+-  [ACM-18] READ_SAMPLING_MESSAGE() doesn't set RETURN_CODE to NO_ACTION when the sampling port is empty Created: 10/May/10  Updated: 10/May/10
+-  [ACM-16]	ACM-1.0.0/arincdemo/two_partition_ex/queueing_port_use doesn't work
+This issue has been closed. This problem was caused because the max number of message per queue on the system was set to its default value 10 and the application was trying to create a queue that can hold 20 messages. The problem was fixed by increasing the max_msg limit on the system.
+-  [ACM-11] errors in port examples Created: 20/Apr/10  Updated: 20/Apr/10: In "ACM-1.0.0/arincdemo/two_partition_ex/sampling_port_use/Configuration.txt", both ports are declared as sources and no port is declared as destination. This is also true of "ACM-1.0.0/arincdemo/two_partition_ex/queueing_port_use/Configuration.txt".
+-  [ACM-10] APEX::SEND_BUFFER() doesn't check MESSAGE_LENGTH Created: 14/Apr/10  Updated: 27/Apr/10
+-  [ACM-9] argument validation in APEX::CREATE_BUFFER() Created: 14/Apr/10  Updated: 27/Apr/10
+-  [ACM-8] incorrect check of MAX_MESSAGE_SIZE argument in APEX::CREATE_BLACKBOARD Created: 13/Apr/10  Updated: 14/Apr/10: Changed the return code to INVALID_PARAM. 
+The comment about //We do not check the max message size right now was wrongly carried over from an earlier version of this file. We do check the lngth of message when it is being displayed (line 87 of APEX_BLACKBOARD_SERVICES.cc)
+Comment by Abhishek Dubey [ 14/Apr/10 11:54 AM ]
+-  [ACM-2] Wrong return code in APEX::SET_PARTITION_MODE() Created: 12/Apr/10  Updated: 13/Apr/10
+
+---------------------------------------------------------------------
+Version 1.0.0 released
+Date: April 1 2010
+The current version of emulator provides following services
+1. Event Management Services.
+2. Semaphore  management services.
+3. Process management services.
+4. Partition management services. We can currently set the partitions to normal mode from idle mode and then stop them. We do not support cold_start and warm_start yet.
+5. Inter partition communication Services: specifically, Blackboards and Buffers.
+6. Intra partition communication Services: Sampling Ports and Queuing Ports
+7. Intra partition Channels: We can currently connect 1 source sampling port and a number of destination sampling ports. We can connect 1 source queuing port to a number of destination queuing ports. Our current implementation does not provide communication facilities between partitions deployed on different modules
+8. Module Manager. It reads in the configuration file and schedules partition and inter-partition communication. Our configuration file uses a simplified key value pair format. It is not the ARINC XML format. We have a schedule generation tool that was developed by researchers at ISIS for a different project. Given partition periods and duration, this tool can be used to generate the partition schedule.
+9. Extended error management services . We built these for experimenting with our Software health management initiative. These services are an extension of what the error management services specified in ARINC SPECIFICATION 653P1-2.  However, the APIs are not the same as the ones in the specification. It is possible to turn off these APIs and not use them.
+

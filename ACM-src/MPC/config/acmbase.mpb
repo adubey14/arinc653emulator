@@ -1,0 +1,7 @@
+project {
+  libpaths += $(ACM_ROOT)/lib
+  includes += $(ACM_ROOT)/include/ACM-1.0
+//  libs += pthread
+//  macros += ENABLE_LOGGING_APP
+  macros += ENABLE_LOGGING_TRACE
+}

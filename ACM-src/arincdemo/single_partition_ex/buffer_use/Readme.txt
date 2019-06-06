@@ -1,0 +1,1 @@
+This example demonstrates a scenario in which two processes inside a partition use a buffer for communication.

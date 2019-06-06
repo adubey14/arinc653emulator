@@ -1,0 +1,71 @@
+[VERSION]
+ACM Runtime 1.0.3
+
+[ACKNOWLEDGEMENTS]
+This work was supported by NASA under award NNX08AY49A. 
+
+
+[NOTES]
+This library uses the 3rd party MICO CORBA COMPONENT Model library. Use of MICO Library is governed by GNU Public License and GNU Lesser Public License.
+
+[Requirements]
+This library has been extensively tested on 32 bit linux kernels > 2.6.28 and g++ (Ubuntu 4.4.1-4ubuntu9) 4.4.1. It has also been 
+tested on 2.6.17.9 and 2.6.9 32 bit kernels. If you can choose the configuration of your machine choose kernel >2.6.28 and g++ >4.4. This will ensure that
+your kernel supports high resolution timers. The library will work without those timers. But, the periodic processes will show more jitter without 
+high resolution timers.  Moreover, following development tools are required on the linux machine.
+1. ltmain.sh (GNU libtool) > 1.5.6
+2. autoconf (GNU Autoconf) > 2.59
+3. g++ (GCC) > 3.4.6
+4. automake (GNU automake) > 1.9.2
+5. doxygen
+6. pkg-config
+6. You must have root privileges on the linux machine to run any demo or code that you develop using this library. This is because we use the SCHED_FIFO realtime schedule
+and this fails if you do not have the root privilege.
+
+[BUILDING LIBRARY]
+* Run ./configure --help to see a list of options
+	Some important Options
+	* Use --prefix=<install directory> to configure your project (default install directory is /usr/local/)
+	* Use --enable-logging-[level] to enable logging (default is no logging). Do not use two levels at the same time. 
+* Use make he library. Hint: to speed up the process you can use make - j <number of parallel jobs>.
+  Documentation will be generated in the docs/html folder.
+* Use make clean to clean up compiled files.
+* Use make distclean to clean up the make environment. Remember, to run autogen again to set the environment.
+* Use make dist to prepare a distribution package containing all sources.
+* Use 'make install' to install in the prefix directory configured above. This will install the library, header files, demos and the documentation.
+
+[BUILDING PROVIDED DEMOS OR YOUR OWN CODE THAT USES THE LIBRARY]
+* Development work does not require root acccess. It is required only if you want to run a program that uses the library.
+* You must set the  environment before starting the development work. Go to the installed directory. You will see a bootstrap.sh. 
+  Run "source bootstrap.sh" to set environment variables. Alternatively, you can put the variables from bootstrap.sh in your .bashrc.
+* To check the demos, go to the installed directory/arincdemo and run ./autogen.sh to set up the make environment
+* Run ./configure
+* run make
+* You can copy the autoconf files and the makefiles and modify them to suit your project structure.
+
+
+
+[RUNNING DEMOS OR COMPILED CODE]
+* Make sure your are root. And you have executed the command 'source <install folder>/bootstrap.sh'
+* Now go to the corresponding folders and run examples. Use ctrl-C (SIGINT) to stop the example. Ctrl-C (SIGINT) might take some time as the terminate only happens at the next scheduling cycle.
+[NOTE]: All demos will run indefinitely unless the limited number of iterations was specified in the module configuration  file. The proper way to terminate the program is to send one SIGINT to the module
+manager or the partition directly. Multiuple SIGINTS will cause the program to exit immediately. In that case some of the resources might not be cleaned properly.
+* At the end, a <pid>.log file will be generated if logging was enabled when the library was built. Grep for TRC on this file to see the start and finish of all processes. Grep for ERR to 
+see deadline violations.
+
+
+
+[RUNNING MULTI-PARTITION_EXAMPLES]
+* MultiParitition examples require a binary file called ModuleManager. It is installed in the bin folder.  ModuleManager requires to read in a caonfiguration file. This file specifies what partitions
+	need to be loaded. it also specifies the communication channels and partition periods. The 2 partition examples contain some demo configuration files. The examples can be executed using make run.
+
+
+[TROUBLE SHOOTING]	
+* If the application fails to start and gives a message saying queueing port/sampling port or buffer exists do the following.
+	* Delete the corresponding shared memmory structures from /dev/shm
+	* delete corresponding message queues from /dev/mqueue. Note internally, the buffer is also implemented as a message queue. If /dev/mqueue does not exis, you might have to run the following command:
+		* mkdir /dev/mqueue; mount -t mqueue none /dev/mqueue
+* If you get a message saying that the application failed while setting the scheduling policy or setting CPU affinity, check to make sure that you are root.
+* If you get a run time library not found error, check to make sure that you ran source <install folder>/bootstrap.sh to create the necessary environment variables.
+* Alternatively, source the cleanup script generated by the Module Manager upon execution
+

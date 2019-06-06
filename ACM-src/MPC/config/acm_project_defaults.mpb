@@ -1,5 +1,0 @@
-project : acm, acm_idl {
-  libout = $(PROJECT_ROOT)/lib
-  libpaths += $(PROJECT_ROOT)/lib
-  includes += $(DATATYPES_DIR) $(PROJECT_ROOT) $(ACM_ROOT)/include $(DEPLOYMENT_DIR) $(DEPLOYMENT_DIR)/datatypes
-}

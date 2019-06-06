@@ -1,6 +1,0 @@
-project : acmbase, taolib_with_idl, dcps {
-  after += ACM_IDL
-  //  libs += ACM_IDL
-  idlflags += -I$(ACM_ROOT)/include/ACM-1.0
-  dcps_ts_flags += -I$(ACM_ROOT)/include/ACM-1.0
-}

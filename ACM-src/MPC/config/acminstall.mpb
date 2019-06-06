@@ -1,4 +1,0 @@
-project : install {
-  libout = $(ACM_ROOT)/lib
-  exeout = $(ACM_ROOT)/bin
-}

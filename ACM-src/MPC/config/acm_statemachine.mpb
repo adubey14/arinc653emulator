@@ -1,4 +1,0 @@
-project : acm {
-  after += StateMachine
-  libs += StateMachine
-}

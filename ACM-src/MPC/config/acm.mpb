@@ -1,4 +1,0 @@
-project : acmbase, acm_idl, taolib {
-  after += ACM
-  libs += ACM-1.0
-}

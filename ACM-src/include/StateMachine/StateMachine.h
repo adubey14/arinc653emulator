@@ -166,8 +166,7 @@ public:
   virtual bool
   IsCurrentEventSet() = 0; // Checks if there are any internal events set
   virtual void
-  GetOutputEvents(map<string, set<Event *>>
-                      &events) = 0; // Gets the list of Output Events generated
+  GetOutputEvents(map<string, set<Event *> > &events) = 0; // Gets the list of Output Events generated
 
   virtual void
   performStateEntryAction(STATEID sid) = 0; // Execute state entry-action

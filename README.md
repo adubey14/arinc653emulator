@@ -24,37 +24,35 @@ CONTENTS AND HOW TO BUILD
 -------------
 $TOP_FOLDER = folder where the repository was extracted
 
-1) Setting the environment variables
+Setting the environment variables
 ---------------------------------
 - Open a Terminal
 - cd to the folder where the archive was extracted.
 - run "source bootstrap.sh"
 
-2) generate makefiles
+Generate makefiles
 ---------------------------
 - Open a terminal
 - Follow the instructions above to set the environment variables
 - run cmake .
 
 
-3)Building the binaries
+Building the binaries
 ---------------------------
 - Open a Terminal
 - Follow the instructions above to set the environment variables
 - Make sure the makefiles had been generated
 - run make 
-
 - This ensures that the new libraries have overwritten the pre-packaged libraries in $TOP/FOLDER/ACM-I
-
 - to view options (does not print options of the external cmake projects)
-
+```
 cmake -L
-
+```
 - Since the above command does not print the options of external projects (with cmake build system),
 - cd to the appropriate external project folder and type 
-
+```
 cmake -L
-
+```
 
 4) Build Samples
 -------------------------------

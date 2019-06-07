@@ -24,23 +24,12 @@ set(acm_sources
    EVENT_PORT.cc 
    UDPSocket.cpp)
 
-set(IDL_GEN_CPP "${ROOT_INCLUDE}/ACM/USER/ACM_IDL_TYPESS.h"; "${ROOT_INCLUDE}/ACM/USER/ACM_IDL_TYPESC.inl"; "${ROOT_INCLUDE}/ACM/USER/ACM_IDL_TYPESC.h"; "${ROOT_INCLUDE}/ACM/USER/ACM_IDL_TYPESC.cpp"; "${ROOT_INCLUDE}/ACM/USER/ACM_IDL_TYPES.h")
-
-ADD_CUSTOM_COMMAND(
-  OUTPUT ${IDL_GEN_CPP}
-  COMMAND ${CMAKE_COMMAND} -DTOP=${ACM_SOURCE_DIR}   -P run_tao_idl.cmake
-  DEPENDS ${ROOT_INCLUDE}/ACM/USER/ACM_IDL_TYPES.idl ${proj_ciao_acm} 
-)
 
 include_directories(${ACM_SOURCE_DIR})
 include_directories(${ROOT_INCLUDE})
 include_directories(${ROOT_INCLUDE}/ACM/USER/)
-include_directories($ENV{ACE_ROOT})
-include_directories($ENV{TAO_ROOT})
-link_directories($ENV{ACE_ROOT}/lib)
-link_directories($ENV{DDS_ROOT}/lib)
 
-ADD_LIBRARY(ACM-1.0 SHARED ${acm_sources} ${IDL_GEN_CPP})
+ADD_LIBRARY(ACM-1.0 SHARED ${acm_sources})
 target_link_libraries(ACM-1.0 rt pthread) 
 SET_TARGET_PROPERTIES(ACM-1.0 PROPERTIES LINK_FLAGS "-version-info $(GENERIC_LIBRARY_VERSION) -release $(GENERIC_RELEASE)")
 SET_TARGET_PROPERTIES(ACM-1.0 PROPERTIES LINK_FLAGS "${corba_libraries}")
@@ -50,10 +39,8 @@ SET_TARGET_PROPERTIES(ACM-1.0-static PROPERTIES OUTPUT_NAME "ACM-1.0")
 SET_TARGET_PROPERTIES(ACM-1.0-static PROPERTIES PREFIX "lib")
 target_link_libraries(ACM-1.0-static  rt pthread) 
 SET_TARGET_PROPERTIES(ACM-1.0-static PROPERTIES LINK_FLAGS "-version-info $(GENERIC_LIBRARY_VERSION) -release $(GENERIC_RELEASE)")
-SET_TARGET_PROPERTIES(ACM-1.0-static PROPERTIES LINK_FLAGS "${corba_libraries}")
 
 INSTALL(DIRECTORY ${ACM_SOURCE_DIR}/include/ACM/ DESTINATION ${library_includedir}/ACM FILES_MATCHING PATTERN "*.h")
-INSTALL(DIRECTORY ${ACM_SOURCE_DIR}/include/ACM/ DESTINATION ${library_includedir}/ACM FILES_MATCHING PATTERN "*.idl")
 
 INSTALL(TARGETS ACM-1.0 ACM-1.0-static
 	LIBRARY DESTINATION lib

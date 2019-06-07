@@ -11,7 +11,7 @@ option(ENABLE_DEBUG "Build With Additional Debugging Code" OFF)
 option(BUILD_EXTERNALS "Build External Projects" ON)
 option(USE_PTHREADS "Use PThreads" ON)
 
-option(logging-info "Log Info" OFF)
+option(logging-info "Log Info" ON)
 option(logging-warning "Log warning" OFF)
 option(logging-debug "Log debug" OFF)
 option(logging-error "Log error" OFF)
@@ -174,62 +174,6 @@ IF (logging-app)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DENABLE_LOGGING_APP")
 ENDIF()
 
-IF (BUILD_EXTERNALS)
-IF(NOT DEFINED proj_ciao_acm)
-set(proj_ciao_acm CIAO_ACM)
-ExternalProject_Add(${proj_ciao_acm}
-  SOURCE_DIR ${CIAO_ROOT}
-  CONFIGURE_COMMAND ${ACE_ROOT}/bin/mwc.pl -type gnuace CIAO_TAO.mwc 
-  BUILD_COMMAND $(MAKE)
-  BUILD_IN_SOURCE 1
-  INSTALL_COMMAND ""
-)
-set_property(TARGET ${proj_ciao_acm} PROPERTY FOLDER "${proj_ciao_acm}")
-ENDIF(NOT DEFINED proj_ciao_acm)
-
-IF(NOT DEFINED proj_dds_acm)
-set(proj_dds_acm DDS_ACM)
-ExternalProject_Add(${proj_dds_acm}
-  SOURCE_DIR ${DDS_ROOT}
-  CONFIGURE_COMMAND ${ACE_ROOT}/bin/mwc.pl -type gnuace DDS_no_tests.mwc 
-  BUILD_COMMAND $(MAKE)
-  BUILD_IN_SOURCE 1
-  INSTALL_COMMAND ""
-  DEPENDS ${proj_ciao_acm}
-)
-set_property(TARGET ${proj_dds_acm} PROPERTY FOLDER "${proj_dds_acm}")
-ENDIF(NOT DEFINED proj_dds_acm)
-ELSE(BUILD_EXTERNALS)
-set(proj_ciao_acm "")
-set(proj_dds_acm "")
-ENDIF(BUILD_EXTERNALS)
-
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_CIAO")
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DF6ACM")
-
-
-if(NOT DEFINED ACE_ROOT)
-        MESSAGE(SEND_ERROR "ACE_ROOT environment variable not set") 
-endif(NOT DEFINED ACE_ROOT)
-if(NOT DEFINED TAO_ROOT)
-        MESSAGE(SEND_ERROR "TAO_ROOT environment variable not set") 
-endif(NOT DEFINED TAO_ROOT)
-if(NOT DEFINED CIAO_ROOT)
-        MESSAGE(SEND_ERROR "CIAO_ROOT environment variable not set") 
-endif(NOT DEFINED CIAO_ROOT)
-if(NOT DEFINED MPC_ROOT)
-        MESSAGE(SEND_ERROR "MPC_ROOT environment variable not set") 
-endif(NOT DEFINED MPC_ROOT)
-if(NOT DEFINED DDS_ROOT)
-        MESSAGE(SEND_ERROR "DDS_ROOT environment variable not set") 
-endif(NOT DEFINED DDS_ROOT)
-
-set(ACM_CORBA_INCLUDE_FILES "#include <ACM/USER/ACM_IDL_HELPER.h>")
-set(corba_cflags "-DACE_NO_INLINE -I${ACE_ROOT} -I${TAO_ROOT}  -I${CIAO_ROOT}  -I${CIAO_ROOT}/ccm  -I${TAO_ROOT}/orbsvcs -I${DDS_ROOT}")
-set(corba_libraries "-L${ACE_ROOT}/lib -lCIAO_Servant_Impl -lCIAO_Session_Container -lCIAO_Session_Container_stub -lCIAO_Container_Base_stub -lCIAO_Base_stub -lCCM_Cookie_Factory -lCCM_svnt -lCCM_session_stub -lCCM_lem_stub -lCCM_stub -lCIAO_Servant_Activator_impl -lCIAO_Servant_Activator_stub -lCIAO_Port_Activator_stub  -lTAO_IFR_Client -lTAO_Utils -lTAO_CosNaming -lTAO_Messaging -lTAO_PortableServer -lTAO_Valuetype -lTAO_PI -lTAO_CodecFactory -lTAO_AnyTypeCode -lTAO -lCIAO_Logger -lACE -L${DDS_ROOT}/lib -lOpenDDS_Dcps")
-
-
-EXEC_PROGRAM(${CMAKE_COMMAND} ARGS -E remove -f ${CMAKE_CURRENT_SOURCE_DIR}/include/ACM/USER/ACM_IDL_TYPES.h  ${CMAKE_CURRENT_SOURCE_DIR}/include/ACM/USER/ACM_IDL_TYPES.cc  ${CMAKE_CURRENT_SOURCE_DIR}/include/ACM/USER/ACM_IDL_TYPESC.h  ${CMAKE_CURRENT_SOURCE_DIR}/include/ACM/USER/ACM_IDL_TYPESC.cpp)
 
 configure_file (
   "${ACM_SOURCE_DIR}/include/ACM/USER/ACM_USER_INCLUDE.h.in"
@@ -273,9 +217,9 @@ else()
 set(HAVE_DOXYGEN 0)
 endif()
 
-if (HAVE_DOXYGEN)
-add_subdirectory(docs)
-endif()
+#if (HAVE_DOXYGEN)
+#add_subdirectory(docs)
+#endif()
 
 ADD_CUSTOM_TARGET(realclean 
                 make clean
@@ -288,7 +232,6 @@ ADD_CUSTOM_TARGET(distclean
 INSTALL(DIRECTORY DESTINATION ${library_includedir})
 INSTALL(DIRECTORY utilityscripts/ DESTINATION bin FILES_MATCHING PATTERN "*.py")
 INSTALL(DIRECTORY arincdemo/ DESTINATION arincdemo  PATTERN "svn" EXCLUDE)
-INSTALL(DIRECTORY MPC/ DESTINATION MPC  PATTERN "svn" EXCLUDE)
 INSTALL(CODE " execute_process( COMMAND chmod +x autogen.sh  WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/arincdemo) " )
 #INSTALL(CODE " execute_process( COMMAND make install  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/3rdParty/mico-source) " )
 #INSTALL(FILES 3rdParty/tfpg/lib/libdiagtfpg-g++4.3.3-2.6.28-32bit.so RENAME libdiagtfpg.so DESTINATION lib )

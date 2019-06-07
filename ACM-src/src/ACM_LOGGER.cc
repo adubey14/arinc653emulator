@@ -42,6 +42,13 @@ inline std::string GET_PARTITION_NAME()
 
 namespace ACM_USER{
 
+ const unsigned long LOGGER_BUFFER::LOG_ENTRY_SIZE=255;
+ unsigned long LOGGER_BUFFER::MAX_LOG_ENTRIES=0;
+ char ** LOGGER_BUFFER::log_buffer=0;
+static ACM_INTERNAL::MUTEX LOG_MUTEX;
+static unsigned int log_index=0;
+static bool log_overflow =false;
+static int FLUSH_OR_NOT=0;
 #ifndef F6ACM
 class REPORTER
 {
@@ -196,14 +203,6 @@ static int CURRENT_LOGLEVEL=FATAL;
 #endif
 
 
- const unsigned long LOGGER_BUFFER::LOG_ENTRY_SIZE=255;
- unsigned long LOGGER_BUFFER::MAX_LOG_ENTRIES=0;
- char ** LOGGER_BUFFER::log_buffer=0;
-
-static ACM_INTERNAL::MUTEX LOG_MUTEX;
-static unsigned int log_index=0;
-static bool log_overflow =false;
-static int FLUSH_OR_NOT=0;
 
 
 void CONFIGLOG(LOG_LEVEL OUTPUT)

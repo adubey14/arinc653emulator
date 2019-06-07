@@ -16,17 +16,12 @@
 using namespace ACM_USER;
 using namespace ACM_INTERNAL;
 
-
-
 struct NETWORK_PARTITION {
-	std::string ConfigurationFile;
-	std::string name;
-	
-	std::vector<std::string> QUEUEING_CHANNELS;
-	std::vector<std::string> SAMPLING_CHANNELS;
-	  
+  std::string ConfigurationFile;
+  std::string name;
 
+  std::vector<std::string> QUEUEING_CHANNELS;
+  std::vector<std::string> SAMPLING_CHANNELS;
 };
-
 
 #endif

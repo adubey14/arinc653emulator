@@ -20,10 +20,10 @@
 #ifndef __PRACTICALSOCKET_INCLUDED__
 #define __PRACTICALSOCKET_INCLUDED__
 
-#include <string>            // For string
-#include <exception>         // For exception class
-  #include <string.h>
-  #include <cstdlib>
+#include <cstdlib>
+#include <exception> // For exception class
+#include <string.h>
+#include <string> // For string
 using namespace std;
 
 /**
@@ -51,7 +51,7 @@ public:
   const char *what() const throw();
 
 private:
-  string userMessage;  // Exception message
+  string userMessage; // Exception message
 };
 
 /**
@@ -59,19 +59,13 @@ private:
  */
 class AbstractSocket {
 public:
-  
-	enum BLOCKING_STATUS_TYPE
-	{
-		BLOCKING,
-		NON_BLOCKING
-	};
+  enum BLOCKING_STATUS_TYPE { BLOCKING, NON_BLOCKING };
 
-	BLOCKING_STATUS_TYPE BLOCKING_STATUS;
+  BLOCKING_STATUS_TYPE BLOCKING_STATUS;
 
-	
-	/**
-   *   Close and deallocate this socket
-   */
+  /**
+*   Close and deallocate this socket
+*/
   ~AbstractSocket();
 
   /**
@@ -98,14 +92,15 @@ public:
 
   /**
    *   Set the local port to the specified port and the local address
-   *   to the specified address.  If you omit the port, a random port 
+   *   to the specified address.  If you omit the port, a random port
    *   will be selected.
    *   @param localAddress local address
    *   @param localPort local port
    *   @exception SocketException thrown if setting local port or address fails
    */
-  void setLocalAddressAndPort(const string &localAddress, 
-    unsigned short localPort = 0) throw(SocketException);
+  void
+  setLocalAddressAndPort(const string &localAddress,
+                         unsigned short localPort = 0) throw(SocketException);
 
   /**
    *   If WinSock, unload the WinSock DLLs; otherwise do nothing.  We ignore
@@ -113,7 +108,7 @@ public:
    *   completeness.  If you are running on Windows and you are concerned
    *   about DLL resource consumption, call this after you are done with all
    *   Socket instances.  If you execute this on Windows while some instance of
-   *   Socket exists, you are toast.  For portability of client code, this is 
+   *   Socket exists, you are toast.  For portability of client code, this is
    *   an empty function on non-Windows platforms so you can always include it.
    *   @param buffer buffer to receive the data
    *   @param bufferLen maximum number of bytes to read into buffer
@@ -130,9 +125,9 @@ public:
    */
   static unsigned short resolveService(const string &service,
                                        const string &protocol = "tcp");
-									   
-void make_non_blocking();	
- void make_blocking();	
+
+  void make_non_blocking();
+  void make_blocking();
 
 private:
   // Prevent the user from trying to use value semantics on this object
@@ -140,7 +135,7 @@ private:
   void operator=(const AbstractSocket &sock);
 
 protected:
-  int sockDesc;              // Socket descriptor
+  int sockDesc; // Socket descriptor
   AbstractSocket(int type, int protocol) throw(SocketException);
   AbstractSocket(int sockDesc);
 };
@@ -157,8 +152,8 @@ public:
    *   @param foreignPort foreign port
    *   @exception SocketException thrown if unable to establish connection
    */
-  void connect(const string &foreignAddress, unsigned short foreignPort)
-    throw(SocketException);
+  void connect(const string &foreignAddress,
+               unsigned short foreignPort) throw(SocketException);
 
   /**
    *   Write the given buffer to this socket.  Call connect() before
@@ -198,16 +193,14 @@ protected:
   CommunicatingSocket(int newConnSD);
 };
 
-
 /**
   *   UDP socket class
   */
 class UDPSocket : public CommunicatingSocket {
 
-
-	
 public:
-	int ref;
+  int ref;
+
 public:
   /**
    *   Construct a UDP socket
@@ -228,8 +221,8 @@ public:
    *   @param localPort local port
    *   @exception SocketException thrown if unable to create UDP socket
    */
-  UDPSocket(const string &localAddress, unsigned short localPort) 
-      throw(SocketException);
+  UDPSocket(const string &localAddress,
+            unsigned short localPort) throw(SocketException);
 
   /**
    *   Unset foreign address and port
@@ -249,7 +242,7 @@ public:
    *   @exception SocketException thrown if unable to send datagram
    */
   void sendTo(const void *buffer, int bufferLen, const string &foreignAddress,
-            unsigned short foreignPort) throw(SocketException);
+              unsigned short foreignPort) throw(SocketException);
 
   /**
    *   Read read up to bufferLen bytes data from this socket.  The given buffer
@@ -261,7 +254,7 @@ public:
    *   @return number of bytes received and -1 for error
    *   @exception SocketException thrown if unable to receive datagram
    */
-  int recvFrom(void *buffer, int bufferLen, string &sourceAddress, 
+  int recvFrom(void *buffer, int bufferLen, string &sourceAddress,
                unsigned short &sourcePort) throw(SocketException);
 
   /**

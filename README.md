@@ -54,7 +54,7 @@ cmake -L
 cmake -L
 ```
 
-4) Build Samples
+Build Samples
 -------------------------------
 - Open a Terminal and go to the arincdemo folder
 - Follow the instructions above to set the environment variables
@@ -62,7 +62,7 @@ cmake -L
 $./autogen.sh
 $make
 
-5) Running Sample
+Running Sample
 --------------
 Each sample folder has a readme at the top level that describes how to run the sample.
 

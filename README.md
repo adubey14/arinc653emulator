@@ -1,5 +1,14 @@
 [![Build Status](https://travis-ci.org/adubey14/arinc653emulator.svg?branch=master)](https://travis-ci.org/adubey14/arinc653emulator)
 
+ACKNOWLEDGEMENT
+-------------------
+
+This work was supported by NASA under award NNX08AY49A. The code contains contribution from the following people at Vanderbilt University.
+
+* Abhishek Dubey
+* Gabor Karsai
+* Nagabhushan Mahadevan
+
 
 README - F6ACM Runtime
 ----------------------

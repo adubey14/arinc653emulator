@@ -39,7 +39,7 @@ void PROCESS_PERIODIC(void) {
 
 int main() {
   // SET_PARTITION_NAME. Required for Log Identification
-  SET_PARTITION_NAME("Partition 2");
+  SET_PARTITION_NAME("Partition2");
 
   RETURN_CODE_TYPE RETURN_CODE;
 

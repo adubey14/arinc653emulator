@@ -25,7 +25,7 @@ set(ENV{LD_LIBRARY_PATH} "$ENV{LD_LIBRARY_PATH}:${MBSHM_ROOT}/lib")
 
 
 
-set(acm_build_args -DBUILD_EXTERNALS=0;-DCMAKE_INSTALL_PREFIX=${ACM_ROOT}) 
+set(acm_build_args -Dlogging-info=OFF -Dlogging-error=ON -DBUILD_EXTERNALS=0;-DCMAKE_INSTALL_PREFIX=${ACM_ROOT}) 
 set(proj_acm_build ACM_BUILD)
 ExternalProject_Add(${proj_acm_build}
   SOURCE_DIR ${ACM_SRC}
